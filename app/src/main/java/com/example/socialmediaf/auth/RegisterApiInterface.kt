@@ -12,11 +12,11 @@ interface RegisterApiInterface {
         @Body request: SignupRequest
     ): Response<SignupResponse>
 
-    /*
+
     @POST("api/accounts/login/")
     suspend fun loginUser(
         @Body request: LoginRequest
     ): Response<LoginResponse>
 
-     */
+
 }

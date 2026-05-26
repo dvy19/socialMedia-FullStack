@@ -19,7 +19,7 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
     private val sessionManager = SessionManager(application)
 
     var loginState = mutableStateOf<String?>(null)
-/*
+
     fun login(email: String, password: String) {
         viewModelScope.launch {
 
@@ -44,7 +44,7 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
- */
+
 
     fun register(email: String, password: String, role: String) {
         viewModelScope.launch {

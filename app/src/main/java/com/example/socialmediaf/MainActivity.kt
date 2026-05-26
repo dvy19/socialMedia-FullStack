@@ -20,9 +20,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             SocialMediaFTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
+                    RootNav(innerPadding)
                 }
             }
         }
     }
+}
+
+sealed class Screens(var route: String){
+
+    data object SignupScreen:Screens("signup")
+    data object LoginScreen:Screens("login")
+
 }

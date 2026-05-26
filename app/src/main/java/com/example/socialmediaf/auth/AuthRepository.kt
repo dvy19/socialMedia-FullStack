@@ -19,7 +19,7 @@ class AuthRepository{
     }
 
 
-/*
+
     suspend fun loginUser(request: LoginRequest): Result<LoginResponse> {
         return try {
             val response = JobPortalApiClient.registerApi.loginUser(request)
@@ -35,7 +35,7 @@ class AuthRepository{
         }
     }
 
- */
+
 
 
 }
