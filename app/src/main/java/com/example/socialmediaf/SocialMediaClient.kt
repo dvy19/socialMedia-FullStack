@@ -1,10 +1,13 @@
-package com.example.socialmediaf.auth
+package com.example.socialmediaf
 
+import com.example.socialmediaf.auth.RegisterApiInterface
+import com.example.socialmediaf.posts.PostApiInterface
+import com.example.socialmediaf.userDetails.UserDetailInterface
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-object JobPortalApiClient {
+object SocialMediaClient {
 
     private const val BASE_URL = "https://social-media-backend-twdg.onrender.com/"
 
@@ -20,4 +23,11 @@ object JobPortalApiClient {
         retrofit.create(RegisterApiInterface::class.java)
     }
 
+    val getPostsApi: PostApiInterface by lazy{
+        retrofit.create(PostApiInterface::class.java)
+    }
+
+    val createUserProfile: UserDetailInterface by lazy{
+        retrofit.create(UserDetailInterface::class.java)
+    }
 }

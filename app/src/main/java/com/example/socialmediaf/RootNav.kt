@@ -9,6 +9,7 @@ import com.example.socialmediaf.Screens.SignupScreen
 
 import com.example.socialmediaf.auth.LoginScreen
 import com.example.socialmediaf.auth.SignupScreen
+import com.example.socialmediaf.userScreens.MainScreen
 
 
 @Composable
@@ -28,6 +29,12 @@ fun RootNav(innerPadding: PaddingValues) {
         composable("signup") {
             SignupScreen(rootNavController)
         }
+
+        composable(Screens.MainScreen.route){
+            MainScreen(rootNavController)
+        }
+
+
 
     }
 }

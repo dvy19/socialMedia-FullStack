@@ -32,4 +32,7 @@ sealed class Screens(var route: String){
     data object SignupScreen:Screens("signup")
     data object LoginScreen:Screens("login")
 
+    data object MainScreen:Screens("main")
+    data object Home:Screens("home")
+
 }

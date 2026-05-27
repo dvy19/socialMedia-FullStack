@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.socialmediaf.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -274,6 +275,13 @@ fun SignupScreen(
                 Text("Sign In", color = primaryColor, fontWeight = FontWeight.Bold)
             }
         }
+    }
+
+    LaunchedEffect(isRegister) {
+        if (isRegister) {
+            rootNavController.navigate(Screens.MainScreen.route)
+        }
+
     }
 
 
