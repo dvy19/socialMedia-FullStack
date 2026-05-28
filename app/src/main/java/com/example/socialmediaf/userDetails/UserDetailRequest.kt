@@ -1,14 +1,14 @@
 package com.example.socialmediaf.userDetails
 
+import com.google.gson.annotations.SerializedName
+
 data class UserDetailRequest(
-
-    var bio:String,
-    var city:String,
-    var date_of_birth:String,
-    var first_name:String,
-    var last_name:String,
-    var gender:String,
-
+    @SerializedName("bio") val bio: String,
+    @SerializedName("city") val city: String,
+    @SerializedName("date_of_birth") val date_of_birth: String,
+    @SerializedName("first_name") val first_name: String,
+    @SerializedName("last_name") val last_name: String,
+    @SerializedName("gender") val gender: String,
 )
 
 data class UserDetailResponse(

@@ -1,6 +1,7 @@
 package com.example.socialmediaf.userScreens
 
 
+import ProfileScreen
 import androidx.compose.foundation.layout.padding
 import androidx.navigation.compose.rememberNavController
 
@@ -32,6 +33,13 @@ fun MainScreen(rootNavController: NavController) {
 
             composable(Screens.Home.route) {
                 HomeScreen(mainNavController)
+            }
+
+            composable(Screens.ProfileScreen.route){
+                ProfileScreen(
+                    mainNavController,
+
+                )
             }
 
         }

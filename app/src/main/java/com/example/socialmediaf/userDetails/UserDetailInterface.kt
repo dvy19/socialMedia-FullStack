@@ -8,13 +8,13 @@ import retrofit2.http.POST
 
 interface UserDetailInterface{
 
-    @POST("api/accounts/create-profile")
+    @POST("api/accounts/create-profile/")
     suspend fun createProfile(
         @Header("Authorization") token: String,
         @Body request: UserDetailRequest
     ): Response<UserDetailResponse>
 
-    @GET("api/accounts/create-profile")
+    @GET("api/accounts/create-profile/")
     suspend fun getProfile(
         @Header("Authorization") token: String,
     ): Response<UserData>

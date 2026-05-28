@@ -35,4 +35,8 @@ sealed class Screens(var route: String){
     data object MainScreen:Screens("main")
     data object Home:Screens("home")
 
+    data object UserDetailScreen:Screens("userDetail")
+
+    data object ProfileScreen:Screens("profile")
+
 }

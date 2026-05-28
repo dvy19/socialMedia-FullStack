@@ -26,10 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.socialmediaf.auth.SessionManager
+import com.example.socialmediaf.SessionManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,17 +38,7 @@ fun UserDetailScreen(
 
 
     val context=LocalContext.current
-/*
-    val sessionManager= SessionManager(context)
-    val repository=RecruiterProfileRepository(sessionManager)
-    val viewModel: RecruiterDetailsViewModel = viewModel(
-        factory = RecruiterDetailsViewModelFactory(repository)
-    )
 
-    val state by viewModel.state.collectAsState()
-    val recruiterState by viewModel.state.collectAsState()
-
- */
 
     val sessionManager= SessionManager(context)
     val repository= DetailRepository(sessionManager)
@@ -103,19 +92,19 @@ fun UserDetailScreen(
         CustomTextField(
             value = firstName,
             onValueChange = { firstName = it },
-            label = "Company Name",
+            label = "First Name",
             icon = Icons.Default.Business)
 
         CustomTextField(
             value = lastName,
             onValueChange = { lastName = it },
-            label = "Full Name",
+            label = "Last Name",
             icon = Icons.Default.Person)
 
         CustomTextField(
             value = gender,
             onValueChange = { gender = it },
-            label = "Position",
+            label = "Gender ( Male, Female, Other )",
             icon = Icons.Default.Person)
 
         CustomTextField(
@@ -127,13 +116,13 @@ fun UserDetailScreen(
         CustomTextField(
             value = bio,
             onValueChange = { bio = it },
-            label = "State",
+            label = "Bio",
             icon = Icons.Default.Home)
 
         CustomTextField(
             value = dob,
             onValueChange = { dob = it },
-            label = "State",
+            label = "Date of Birth",
             icon = Icons.Default.Home)
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -163,7 +152,13 @@ fun UserDetailScreen(
                     bio.isNotBlank(), // Button is only active if logic is true
             shape = MaterialTheme.shapes.medium
         ) {
-            Text(text = "Submit Details", fontSize = 18.sp)
+
+            if(detailState is UserDetailState.Loading){
+                CircularProgressIndicator()
+            }
+            else{
+                Text(text = "Submit")
+            }
         }
 
 
@@ -174,9 +169,7 @@ fun UserDetailScreen(
 
 
                 is UserDetailState.Success -> {
-                    rootNavController.navigate("main") {
-
-                    }
+                    rootNavController.navigate("main")
                 }
 
                 is UserDetailState.Error -> {

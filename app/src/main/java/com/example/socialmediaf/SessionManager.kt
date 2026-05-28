@@ -1,4 +1,4 @@
-package com.example.socialmediaf.auth
+package com.example.socialmediaf
 
 
 import android.content.Context

@@ -81,10 +81,11 @@ fun BottomNavBar(mainNavController: NavHostController) {
                     Color(0xFF6C2BEE) else Color.Gray
             )
         }
+        */
 
         IconButton(
             onClick = {
-                mainNavController.navigate(Screens.RecruiterProfile.route) {
+                mainNavController.navigate(Screens.ProfileScreen.route) {
                     popUpTo(mainNavController.graph.startDestinationId)
                     launchSingleTop = true
                 }
@@ -94,12 +95,11 @@ fun BottomNavBar(mainNavController: NavHostController) {
             Icon(
                 Icons.Default.Person,
                 contentDescription = null,
-                tint = if (currentRoute == Screens.RecruiterProfile.route)
+                tint = if (currentRoute == Screens.ProfileScreen.route)
                     Color(0xFF6C2BEE) else Color.Gray
             )
         }
     }
 
- */
+
     }
-}

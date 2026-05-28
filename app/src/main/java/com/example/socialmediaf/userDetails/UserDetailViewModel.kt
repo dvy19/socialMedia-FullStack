@@ -1,5 +1,6 @@
 package com.example.socialmediaf.userDetails
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,13 +31,24 @@ class UserDetailViewModel(
 
                 val response=repository.create_profile(request)
 
+                Log.d("m",response.toString())
+
                 if(response.isSuccessful && response.body()!=null){
+
+                    Log.d("m",response.toString())
+
 
                     _userDetailState.value = UserDetailState.Success(
                         response.body()!!.data
                     )
                 }
                 else{
+                    Log.d("m",response.errorBody().toString())
+                    Log.d("m",response.message())
+                    Log.d("m",response.toString())
+                    Log.d("m",response.code().toString())
+
+
                     _userDetailState.value = UserDetailState.Error(
                         response.message() ?: "Failed to create profile"
                     )

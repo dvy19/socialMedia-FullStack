@@ -5,7 +5,9 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.socialmediaf.SessionManager
 import kotlinx.coroutines.launch
+
 
 
 class RegisterViewModel(application: Application) : AndroidViewModel(application){

@@ -9,11 +9,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Business
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.LockClock
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
@@ -32,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.socialmediaf.Screens
+import com.example.socialmediaf.SessionManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -259,7 +257,8 @@ fun SignupScreen(
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(containerColor = primaryColor, contentColor = Color.White)
         ) {
-            Text("Create Account", style = MaterialTheme.typography.titleMedium)
+
+
         }
 
         // Footer Navigation
@@ -279,7 +278,7 @@ fun SignupScreen(
 
     LaunchedEffect(isRegister) {
         if (isRegister) {
-            rootNavController.navigate(Screens.MainScreen.route)
+            rootNavController.navigate(Screens.UserDetailScreen.route)
         }
 
     }

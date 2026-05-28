@@ -44,6 +44,8 @@ android {
 
 dependencies {
 
+    implementation("androidx.compose.material:material-icons-extended:1.6.7")
+
     // Core — pinned to avoid SDK 36 requirement
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.core:core:1.15.0")

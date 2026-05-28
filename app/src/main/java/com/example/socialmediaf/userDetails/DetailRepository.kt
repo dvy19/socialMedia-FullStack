@@ -2,7 +2,7 @@ package com.example.socialmediaf.userDetails
 
 import android.util.Log
 import com.example.socialmediaf.SocialMediaClient
-import com.example.socialmediaf.auth.SessionManager
+import com.example.socialmediaf.SessionManager
 import retrofit2.Response
 
 class DetailRepository(

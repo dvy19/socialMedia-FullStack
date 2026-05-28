@@ -9,6 +9,7 @@ import com.example.socialmediaf.Screens.SignupScreen
 
 import com.example.socialmediaf.auth.LoginScreen
 import com.example.socialmediaf.auth.SignupScreen
+import com.example.socialmediaf.userDetails.UserDetailScreen
 import com.example.socialmediaf.userScreens.MainScreen
 
 
@@ -32,6 +33,10 @@ fun RootNav(innerPadding: PaddingValues) {
 
         composable(Screens.MainScreen.route){
             MainScreen(rootNavController)
+        }
+
+        composable(Screens.UserDetailScreen.route){
+            UserDetailScreen(rootNavController)
         }
 
 
