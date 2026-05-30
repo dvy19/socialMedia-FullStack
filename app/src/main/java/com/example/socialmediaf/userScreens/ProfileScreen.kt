@@ -22,7 +22,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
@@ -41,7 +40,14 @@ import com.example.socialmediaf.userDetails.DetailViewModelFactory
 import com.example.socialmediaf.userDetails.UserDetailViewModel
 import androidx.compose.runtime.collectAsState
 import com.example.socialmediaf.userDetails.UserDetailState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Message
+import androidx.compose.material.icons.filled.PersonAdd
+import com.example.socialmediaf.Screens
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
                   mainNavController: NavController
@@ -66,43 +72,117 @@ fun ProfileScreen(
         viewModel.getUserProfile()
     }
 
-    when(val result = state.value){
+    Scaffold(
 
-        is UserDetailState.Idle->{
-            Text("Loading....")
-        }
+        topBar = {
 
-        is UserDetailState.Loading->{
+            TopAppBar(
 
-            Box( modifier=Modifier.fillMaxSize(),){
-                CircularProgressIndicator()
+                title = {
+                    Text("Your Profile")
+                },
+
+                navigationIcon = {
+
+                    IconButton(
+                        onClick = {
+
+                        }
+                    ) {
+                        Icon(
+                            Icons.Default.Menu,
+                            contentDescription = null
+                        )
+                    }
+                },
+
+                actions = {
+
+                    IconButton(
+                        onClick = {
+                           // mainNavController.navigate(Screens.Suggestion.route)
+
+
+                        }
+                    ) {
+                        Icon(
+                            Icons.Default.Message,
+                            contentDescription = null
+                        )
+                    }
+                }
+            )
+        },
+
+        floatingActionButton = {
+
+            FloatingActionButton(
+                onClick = {
+
+                }
+            ) {
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = null
+                )
             }
         }
 
-        is UserDetailState.Success -> {
+    ) { innerPadding ->
 
-            val profile=result.userData
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
 
-            ProfileScreenLayout(
-                onLogout = {
-                    sessionManager.logout()
-                    mainNavController.navigate("login")
-                },
-                onActivity = {
+            when (val result = state) {
 
-                },
+                is UserDetailState.Idle -> {
 
-                first_name=profile.first_name,
-                bio=profile.bio
-            )
-        }
+                    Text("Loading...")
+                }
 
-        is UserDetailState.Error->{
-            Text("Error")
-        }
+                is UserDetailState.Loading -> {
 
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is UserDetailState.Success -> {
+
+                    val profile = result.userData
+
+                    ProfileScreenLayout(
+
+                        onLogout = {
+                            sessionManager.logout()
+
+                            mainNavController.navigate("login")
+                        },
+
+                        onActivity = {
+
+                        },
+
+                        first_name = profile.first_name,
+                        bio = profile.bio
+                    )
+                }
+
+                is UserDetailState.Error -> {
+
+                    Text("Error")
+                }
+            }
         }
     }
+}
+
 
 
 @Composable

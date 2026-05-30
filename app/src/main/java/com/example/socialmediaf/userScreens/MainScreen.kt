@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.socialmediaf.BottomNavBar
 import com.example.socialmediaf.Screens
+import com.example.socialmediaf.friend.FriendProfile
 
 @Composable
 fun MainScreen(rootNavController: NavController) {
@@ -39,6 +40,24 @@ fun MainScreen(rootNavController: NavController) {
                 ProfileScreen(
                     mainNavController,
 
+                )
+            }
+
+            composable(Screens.SearchScreen.route){
+                SearchScreen(mainNavController)
+            }
+
+            composable(Screens.FriendProfile.route){
+                    backStackEntry ->
+
+                val id =
+                    backStackEntry.arguments
+                        ?.getString("id")
+                        ?.toIntOrNull()
+
+                FriendProfile(
+                    userId = id,
+                    mainNavController=mainNavController
                 )
             }
 

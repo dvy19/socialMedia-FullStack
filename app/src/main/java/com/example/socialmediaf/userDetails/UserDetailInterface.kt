@@ -5,6 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface UserDetailInterface{
 
@@ -18,6 +19,12 @@ interface UserDetailInterface{
     suspend fun getProfile(
         @Header("Authorization") token: String,
     ): Response<UserData>
+
+    @GET("api/accounts/search-users/")
+    suspend fun searchUsers(
+       // @Header("Authorization") token: String,
+        @Query("q") query: String
+    ): Response<List<UserData>>
 
 }
 

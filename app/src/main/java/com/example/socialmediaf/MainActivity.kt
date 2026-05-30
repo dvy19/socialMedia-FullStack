@@ -39,4 +39,10 @@ sealed class Screens(var route: String){
 
     data object ProfileScreen:Screens("profile")
 
+    //data object Suggestion:Screens("suggest")
+
+    data object  SearchScreen:Screens("search")
+
+    data object FriendProfile:Screens("friend_profile")
+
 }

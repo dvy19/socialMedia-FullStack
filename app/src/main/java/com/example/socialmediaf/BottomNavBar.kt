@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,10 +37,10 @@ fun BottomNavBar(mainNavController: NavHostController) {
                     Color(0xFF6C2BEE) else Color.Gray
             )
         }
-        /*
+
         IconButton(
             onClick = {
-                mainNavController.navigate(Screens.RecruiterPost.route) {
+                mainNavController.navigate(Screens.SearchScreen.route) {
                     popUpTo(mainNavController.graph.startDestinationId)
                     launchSingleTop = true
                 }
@@ -47,12 +48,14 @@ fun BottomNavBar(mainNavController: NavHostController) {
             modifier = Modifier.weight(1f)
         ) {
             Icon(
-                Icons.Default.Add,
+                Icons.Default.Search,
                 contentDescription = null,
-                tint = if (currentRoute == Screens.RecruiterPost.route)
+                tint = if (currentRoute == Screens.SearchScreen.route)
                     Color(0xFF6C2BEE) else Color.Gray
             )
         }
+        /*
+
 
         IconButton(
             onClick = {
@@ -68,19 +71,7 @@ fun BottomNavBar(mainNavController: NavHostController) {
             )
         }
 
-        IconButton(
-            onClick = {
-                mainNavController.navigate(Screens.RecruiterJob.route)
-            },
-            modifier = Modifier.weight(1f)
-        ) {
-            Icon(
-                Icons.Default.Message,
-                contentDescription = null,
-                tint = if (currentRoute == Screens.RecruiterJob.route)
-                    Color(0xFF6C2BEE) else Color.Gray
-            )
-        }
+
         */
 
         IconButton(
