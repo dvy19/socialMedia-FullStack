@@ -1,11 +1,14 @@
 package com.example.socialmediaf.userDetails
 
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Business
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
@@ -29,6 +32,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.socialmediaf.SessionManager
+import androidx.compose.material.icons.filled.ArrowBack
+
+val DeepPlum = Color(0xFF4A2840)       // Primary branding purple
+val WarmCappuccino = Color(0xFF6E554F) // Subdued secondary brown
+val LightLavender = Color(0xFFF3EDF2)  // Soft light purple background accent
+val CreamBackground = Color(0xFFFAF8F5) // Clean off-white surface color
+val OnyxText = Color(0xFF262124)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,6 +55,8 @@ fun UserDetailScreen(
     val viewModel: UserDetailViewModel=viewModel(
         factory= DetailViewModelFactory(repository)
     )
+
+
 
     val detailState by  viewModel.userDetailState.collectAsState()
 
@@ -63,103 +75,198 @@ fun UserDetailScreen(
 
 
 
+    val scrollState = rememberScrollState()
+    val genderOptions = listOf("male", "female", "other")
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text(
-            text = "Social Media",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF3852B4),
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
+    // Reusable custom styles to clean up field logic
+    val customTextFieldColors = OutlinedTextFieldDefaults.colors(
+        focusedBorderColor = DeepPlum,
+        unfocusedBorderColor = WarmCappuccino.copy(alpha = 0.4f),
+        focusedLabelColor = DeepPlum,
+        unfocusedLabelColor = WarmCappuccino,
+        focusedTextColor = OnyxText,
+        unfocusedTextColor = OnyxText
+    )
 
-        Text(
-            text = "Add Your Details ",
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF3852B4),
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-
-        // Reusable Input Fields
-        CustomTextField(
-            value = firstName,
-            onValueChange = { firstName = it },
-            label = "First Name",
-            icon = Icons.Default.Business)
-
-        CustomTextField(
-            value = lastName,
-            onValueChange = { lastName = it },
-            label = "Last Name",
-            icon = Icons.Default.Person)
-
-        CustomTextField(
-            value = gender,
-            onValueChange = { gender = it },
-            label = "Gender ( Male, Female, Other )",
-            icon = Icons.Default.Person)
-
-        CustomTextField(
-            value = city,
-            onValueChange = { city = it },
-            label = "City",
-            icon = Icons.Default.LocationOn)
-
-        CustomTextField(
-            value = bio,
-            onValueChange = { bio = it },
-            label = "Bio",
-            icon = Icons.Default.Home)
-
-        CustomTextField(
-            value = dob,
-            onValueChange = { dob = it },
-            label = "Date of Birth",
-            icon = Icons.Default.Home)
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Submit Button
-        Button(
-            onClick = {
-                val request = UserDetailRequest(
-                    bio = bio,
-                    city = city,
-                    date_of_birth = dob,
-                    first_name = firstName,
-                    last_name = lastName,
-                    gender = gender
-
-                )
-
-                viewModel.createUserProfile(request)
-            },
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Set Up Profile", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)) },
+                navigationIcon = {
+                    IconButton(onClick = { /* Handle navigation back */ }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = OnyxText)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = CreamBackground)
+            )
+        },
+        containerColor = CreamBackground
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            enabled = firstName.isNotBlank() &&
-                    lastName.isNotBlank() &&
-                    dob.isNotBlank() &&
-                    city.isNotBlank() &&
-                    bio.isNotBlank(), // Button is only active if logic is true
-            shape = MaterialTheme.shapes.medium
+                .fillMaxSize()
+                .padding(innerPadding)
+                .verticalScroll(scrollState)
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
 
-            if(detailState is UserDetailState.Loading){
-                CircularProgressIndicator()
+            // Subtitle text greeting
+            Text(
+                text = "Tell us a bit about yourself to kickstart your feed.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = WarmCappuccino
+            )
+
+            // 1. Name Row (First Name & Last Name)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                OutlinedTextField(
+                    value = firstName,
+                    onValueChange = { firstName = it },
+                    label = { Text("First Name") },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = customTextFieldColors,
+                    modifier = Modifier.weight(1f),
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = lastName,
+                    onValueChange = { lastName = it },
+                    label = { Text("Last Name") },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = customTextFieldColors,
+                    modifier = Modifier.weight(1f),
+                    singleLine = true
+                )
             }
-            else{
-                Text(text = "Submit")
+
+            // 2. Custom Gender Card Selector
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "Gender",
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                    color = WarmCappuccino
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    genderOptions.forEach { option ->
+                        val isSelected = gender == option
+
+                        Card(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(48.dp)
+                                .clickable { gender = option },
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (isSelected) LightLavender else Color.White
+                            ),
+                            border = BorderStroke(
+                                width = if (isSelected) 2.dp else 1.dp,
+                                color = if (isSelected) DeepPlum else WarmCappuccino.copy(alpha = 0.2f)
+                            )
+                        ) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = option,
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                                    ),
+                                    color = if (isSelected) DeepPlum else OnyxText
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 3. Location & Birthday Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                OutlinedTextField(
+                    value = city,
+                    onValueChange = { city = it },
+                    label = { Text("City") },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = customTextFieldColors,
+                    modifier = Modifier.weight(1.2f), // Give City slightly more structural space
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = dob,
+                    onValueChange = { dob = it },
+                    label = { Text("YYYY-MM-DD") }, // Ideal for manual entry or clicking custom pickers
+                    shape = RoundedCornerShape(16.dp),
+                    colors = customTextFieldColors,
+                    modifier = Modifier.weight(1f),
+                    singleLine = true
+                )
+            }
+
+            // 4. Bio Text Area
+            OutlinedTextField(
+                value = bio,
+                onValueChange = { bio = it },
+                label = { Text("Bio") },
+                placeholder = { Text("Share a little about who you are...") },
+                shape = RoundedCornerShape(16.dp),
+                colors = customTextFieldColors,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp), // Height creates the textual paragraph room
+                maxLines = 5
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // 5. Submit Action Button
+            Button(
+                onClick = {
+                    val request= UserDetailRequest(
+                        bio = bio,
+                        city = city,
+                        date_of_birth = dob,
+                        first_name = firstName,
+                        last_name = lastName,
+                        gender = gender
+                    )
+
+                    viewModel.createUserProfile(request)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = DeepPlum,
+                    contentColor = Color.White
+                ),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
+            ) {
+
+                if( detailState is UserDetailState.Loading) {
+                    CircularProgressIndicator()
+                }
+                else{
+
+                    Text(
+                        text = "Save & Continue",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                    )
             }
         }
+    }
 
 
 
@@ -182,28 +289,6 @@ fun UserDetailScreen(
     }
 }
 
-@Composable
-fun CustomTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    icon: ImageVector,
-    modifier: Modifier = Modifier
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        leadingIcon = { Icon(imageVector = icon, contentDescription = null) },
-        modifier = Modifier.fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp)),
-        singleLine = true,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline
-        )
-    )
-}
 
 @Preview
 @Composable

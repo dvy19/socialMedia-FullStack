@@ -2,6 +2,7 @@ package com.example.socialmediaf.friend
 
 
 import ProfileScreenLayout
+import ProfileStat
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.ui.unit.dp
@@ -68,7 +69,10 @@ fun FriendProfile(
 
     val viewModel: FriendViewModel=viewModel()
 
+
+
     val friendState = viewModel.friendDetailState.collectAsState()
+
 
 
 
@@ -170,7 +174,7 @@ fun FriendProfile(
 
                     val profile = result.userData
 
-                    ProfileScreenLayout(
+                    FriendProfileScreenLayout(
 
                         onLogout = {
                             sessionManager.logout()
@@ -178,7 +182,7 @@ fun FriendProfile(
                             mainNavController.navigate("login")
                         },
 
-                        onActivity = {
+                        onMessage = {
 
                         },
 
@@ -194,6 +198,129 @@ fun FriendProfile(
             }
         }
     }
+}
+
+
+@Composable
+fun FriendProfileScreenLayout(
+    onLogout: () -> Unit,
+    onMessage:()->Unit,
+    first_name:String,
+    bio:String
+){
+
+    val backgroundColor = Color(0xFF121212)
+    val surfaceColor = Color(0xFF1E1E1E)
+    val accentColor = Color(0xFFBB86FC)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor)
+    ) {
+        // --- Profile Header Section ---
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Profile Photo Placeholder
+            Box(
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(CircleShape)
+                    .background(surfaceColor)
+                    .border(2.dp, accentColor, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("JD", color = accentColor, fontSize = 32.sp, fontWeight = FontWeight.Bold)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (false) {
+                CircularProgressIndicator()
+            } else {
+                Text(
+                    text = first_name,
+                    color = Color.White,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            // Stats
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+
+                ProfileStat("Posts", 0)
+                ProfileStat("Followers", 0)
+                ProfileStat("Following", 0)
+            }
+
+        }
+
+
+
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // --- Action Buttons ---
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Button(
+                onClick = onMessage,
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(containerColor = surfaceColor),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Icon(Icons.Default.Edit, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("View Activity")
+            }
+
+            Button(
+                onClick = onLogout,
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFCF6679)), // Error/Red tone
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Icon(Icons.Default.ExitToApp, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Logout", color = Color.White)
+            }
+        }
+    }
+
+    Divider(color = Color.DarkGray, thickness = 1.dp)
+
+    // --- User's Posts Area ---
+    Text(
+        text = "My Posts",
+        color = Color.White,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.SemiBold,
+        modifier = Modifier.padding(16.dp)
+    )
+
+    // Posts
+    /*
+        LazyColumn {
+            items(posts) { post ->
+                SocialPostItem(
+                    post = post,
+                    onProfileClick = {} // already on profile
+                )
+            }
+
+
+     */
+
+
 }
 
 

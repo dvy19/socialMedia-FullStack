@@ -1,5 +1,6 @@
 package com.example.socialmediaf.posts
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,16 +23,32 @@ class PostViewModel(
     private val _getAllPostState = MutableStateFlow<GetAllPostState>(GetAllPostState.Idle)
     val getAllPostState: StateFlow<GetAllPostState> = _getAllPostState.asStateFlow()
 
-    fun fetchAllPosts(token: String){
+    fun fetchAllPosts(){
 
         viewModelScope.launch{
 
             _getAllPostState.value = GetAllPostState.Loading
 
+            Log.d("m", getAllPostState.value.toString())
+
             try{
-                val response=repository.get_all_posts(token)
+
+                Log.d("POST_API", "Before API call")
+
+                val response = repository.get_all_posts()
+
+                Log.d("POST_API", "Code = ${response.code()}")
+                Log.d("POST_API", "Successful = ${response.isSuccessful}")
+                Log.d("POST_API", "Body = ${response.body()}")
+                Log.d("POST_API", "ErrorBody = ${response.errorBody()?.string()}")
+
+                Log.d("POST_API", "After API call")
+
+                Log.d("m", getAllPostState.value.toString())
 
                 if(response.body()!=null && response.isSuccessful){
+                    Log.d("m", getAllPostState.value.toString())
+
 
                     _getAllPostState.value =
                         GetAllPostState.Success(
@@ -42,6 +59,9 @@ class PostViewModel(
 
                 // api error
                 else {
+
+                    Log.d("m", getAllPostState.value.toString())
+
 
                     _getAllPostState.value =
                         GetAllPostState.Error(
@@ -56,8 +76,13 @@ class PostViewModel(
             // network/parsing error
             catch (e: Exception) {
 
+                Log.d("m", getAllPostState.value.toString())
+
+
                 _getAllPostState.value =
                     GetAllPostState.Error(
+
+
 
                         e.message
                             ?: "Unknown Error"

@@ -186,7 +186,7 @@ fun ProfileScreen(
 
 
 @Composable
-private fun ProfileStat(label: String, count: Int) {
+fun ProfileStat(label: String, count: Int) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = count.toString(),

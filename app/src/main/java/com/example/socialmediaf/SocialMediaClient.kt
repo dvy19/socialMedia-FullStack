@@ -1,6 +1,7 @@
 package com.example.socialmediaf
 
 import com.example.socialmediaf.auth.RegisterApiInterface
+import com.example.socialmediaf.chat.ChatApiInterface
 import com.example.socialmediaf.friend.FriendApiInterface
 import com.example.socialmediaf.posts.PostApiInterface
 import com.example.socialmediaf.userDetails.UserDetailInterface
@@ -38,5 +39,9 @@ object SocialMediaClient {
 
     val getFriendProfile: FriendApiInterface by lazy{
         retrofit.create(FriendApiInterface::class.java)
+    }
+
+    val chatApiService: ChatApiInterface by lazy{
+        retrofit.create(ChatApiInterface::class.java)
     }
 }

@@ -59,10 +59,13 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
 
-        token?.let {
 
-            viewModel.fetchAllPosts(it)
-        }
+
+            Log.d("TOKEN", token.toString())
+
+
+            viewModel.fetchAllPosts()
+
     }
 
     val getPostState by viewModel.getAllPostState.collectAsState()
@@ -80,7 +83,7 @@ fun HomeScreen(
 
             is GetAllPostState.Loading->{
                 Box(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator()
@@ -88,6 +91,8 @@ fun HomeScreen(
             }
 
             is GetAllPostState.Success-> {
+
+                Log.d("m", getPostState.toString())
 
                 val posts = (getPostState as GetAllPostState.Success).posts
                 PostVerticalList(

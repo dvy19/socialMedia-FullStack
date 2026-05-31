@@ -19,9 +19,12 @@ fun RootNav(innerPadding: PaddingValues) {
 
     NavHost(
         navController = rootNavController,
-        startDestination = "signup"
+        startDestination = "splash"
     ) {
 
+        composable("splash"){
+            SplashScreen(rootNavController)
+        }
 
         composable(Screens.LoginScreen.route) {
             LoginScreen(rootNavController)
