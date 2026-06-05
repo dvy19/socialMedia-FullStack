@@ -51,7 +51,17 @@ fun LoginScreen(
     val primaryColor = Color(0xef024675) // Professional Blue
     val secondaryText = Color(0xFF64748B)
 
-    var state = viewModel.loginState.value
+    val loginSuccess = viewModel.loginState.value
+
+    LaunchedEffect(loginSuccess) {
+        if (loginSuccess) {
+            rootNavController.navigate("main") {
+                popUpTo("login") {
+                    inclusive = true
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -195,14 +205,8 @@ fun LoginScreen(
             }
         }
 
-        // Error/State Message
-        state?.let {
-            Text(
-                text = it,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(top = 16.dp).align(Alignment.CenterHorizontally)
-            )
-        }
+
+
     }
 }
 

@@ -20,7 +20,7 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
 
     private val sessionManager = SessionManager(application)
 
-    var loginState = mutableStateOf<String?>(null)
+    var loginState = mutableStateOf(false)
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -35,13 +35,13 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
                 if (token != null) {
 
                     sessionManager.saveAuthToken(token)
-                    loginState.value = "Login Successful ✅"
+                    loginState.value = true
                 } else {
-                    loginState.value = "No token received ❌"
+                    loginState.value = false
                 }
 
             } else {
-                loginState.value = "Error: ${result.exceptionOrNull()?.message}"
+                loginState.value = false
             }
         }
     }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 sealed class GetAllPostState {
     object Idle : GetAllPostState()
     object Loading: GetAllPostState()
-    data class Success(val posts: List<PostData>) : GetAllPostState()
+    data class Success(val posts: List<PostResponse>) : GetAllPostState()
     data class Error(val message: String) : GetAllPostState()
 }
 

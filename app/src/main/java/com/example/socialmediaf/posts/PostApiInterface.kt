@@ -11,5 +11,5 @@ interface PostApiInterface{
     @GET("api/posts/create-post")
     suspend fun getAllPosts(
         @Header ("Authorization") token:String,
-    ) : Response<List<PostData>>
+    ) : Response<List<PostResponse>>
 }

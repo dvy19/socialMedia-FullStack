@@ -1,7 +1,6 @@
 package com.example.socialmediaf.userScreens
 
 import androidx.compose.foundation.lazy.items
-
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
@@ -39,7 +38,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.socialmediaf.posts.GetAllPostState
-import com.example.socialmediaf.posts.PostData
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.outlined.Bookmark
+import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.socialmediaf.posts.PostResponse
 
 @Composable
 fun HomeScreen(
@@ -59,13 +75,13 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
 
-
+        token?.let {
 
             Log.d("TOKEN", token.toString())
 
 
             viewModel.fetchAllPosts()
-
+        }
     }
 
     val getPostState by viewModel.getAllPostState.collectAsState()
@@ -124,7 +140,7 @@ fun HomeScreen(
 
 @Composable
 fun PostVerticalList(
-    posts: List<PostData>,
+    posts: List<PostResponse>,
     onViewClick: () -> Unit,
     //onCommentClick: (JobResponse) -> Unit = {},
     mainNavController: NavController
@@ -147,71 +163,121 @@ fun PostVerticalList(
     }
 }
 
+
 @Composable
 fun PostItem(
-    post: PostData,
-    onViewClick: () -> Unit = {},
-    //onCommentClick: () -> Unit = {}
+    post: PostResponse,
+    onViewClick: () -> Unit,
+    onLikeClick: (Boolean) -> Unit = {},
+    onSaveClick: (Boolean) -> Unit = {}
 ) {
+    // Local state for UI responsiveness (or pass these down from your viewmodel)
+    var isLiked by remember { mutableStateOf(false) }
+    var isSaved by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(horizontal = 12.dp, vertical = 6.dp),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
-            modifier = Modifier
-                .padding(12.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
+            // 👤 USER INFO HEADER
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Profile Picture (Using placeholder logic - swap with Coil/Glide painter as needed)
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(Color.LightGray) // Fallback background
+                ) {
+                    /* Uncomment if using Coil:
+                    Image(
+                        painter = rememberAsyncImagePainter(post.userProfilePicUrl),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                    */
+                }
 
-            // 🔹 User Info
+                Spacer(modifier = Modifier.width(12.dp))
+
+                // Name & Location
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = post.user.first_name?:"null",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = post.user.city?:"null",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // 📝 POST CONTENT
             Text(
                 text = post.title,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-
-
-            Text(
-                text = post.category,
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
-            )
-
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // 🔹 Title
-            Text(
-                text = post.content,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.1.sp
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
+            Text(
+                text = post.content,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                lineHeight = 20.sp
+            )
 
+            Spacer(modifier = Modifier.height(12.dp))
+            Divider(color = Color.LightGray.copy(alpha = 0.3f), thickness = 1.dp)
+            Spacer(modifier = Modifier.height(4.dp))
 
-            // 🔹 Actions Row
+            // 🏎️ ACTIONS ROW (Like & Save)
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-
                 // ❤️ Like Button
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { onViewClick() }
-                ) {
-                    Button(
-                        onClick = { onViewClick() },
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Text(text = "View")
-                    }
-                    Spacer(modifier = Modifier.width(4.dp))
-                    //Text(text = "${post.likes_count}")
+                IconButton(onClick = {
+                    isLiked = !isLiked
+                    onLikeClick(isLiked)
+                }) {
+                    Icon(
+                        imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = "Like Button",
+                        tint = if (isLiked) Color.Red else Color.Gray
+                    )
+                }
+
+                // 🔖 Save Button
+                IconButton(onClick = {
+                    isSaved = !isSaved
+                    onSaveClick(isSaved)
+                }) {
+                    Icon(
+                        imageVector = if (isSaved) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder,
+                        contentDescription = "Save Button",
+                        tint = if (isSaved) MaterialTheme.colorScheme.primary else Color.Gray
+                    )
                 }
             }
         }

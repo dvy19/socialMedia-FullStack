@@ -11,7 +11,7 @@ class PostRepository(
 
     private val apiService= SocialMediaClient.getPostsApi
 
-    suspend fun get_all_posts():Response<List<PostData>>{
+    suspend fun get_all_posts():Response<List<PostResponse>>{
 
         val token = sessionManager.getAuthToken()
             ?: throw IllegalStateException("User is not authenticated")
