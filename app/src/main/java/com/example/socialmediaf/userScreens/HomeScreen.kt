@@ -56,10 +56,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.socialmediaf.posts.PostResponse
-
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.ChatBubbleOutline
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material3.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    rootNavController: NavController
+    rootNavController: NavController,
+    onAddPostClick: () -> Unit,
+    onNotificationClick: () -> Unit,
+    onMessageClick: () -> Unit
 ){
 
     val context= LocalContext.current
@@ -70,6 +80,10 @@ fun HomeScreen(
     val viewModel: PostViewModel=viewModel(
         factory= PostViewModelFactory(repository)
     )
+
+    val lightBackground = Color(0xFFFAFAFC) // Crisp, soft off-white
+    val primaryBrand = Color(0xFF6366F1)    // Creative Indigo accent
+    val textPrimary = Color(0xFF1E1E24)
 
     val token=sessionManager.getAuthToken()
 
@@ -86,54 +100,119 @@ fun HomeScreen(
 
     val getPostState by viewModel.getAllPostState.collectAsState()
 
-    Column(
-        modifier=Modifier.fillMaxSize()
-    )
-    {
+    Scaffold(
+        containerColor = lightBackground,
 
-        when( getPostState){
-
-            is GetAllPostState.Idle->{
-                Text(text = "Nothing to Show")
-            }
-
-            is GetAllPostState.Loading->{
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-
-            is GetAllPostState.Success-> {
-
-                Log.d("m", getPostState.toString())
-
-                val posts = (getPostState as GetAllPostState.Success).posts
-                PostVerticalList(
-                    posts = posts,
-                    onViewClick = {},
-                    mainNavController = rootNavController
+        // 🔹 TOP APP BAR
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Home",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = textPrimary
+                    )
+                },
+                // Moving action items to the left/navigation section as requested
+                navigationIcon = {
+                    Row(
+                        modifier = Modifier.padding(start = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = onNotificationClick) {
+                            Icon(
+                                imageVector = Icons.Outlined.Notifications,
+                                contentDescription = "Notifications",
+                                tint = textPrimary
+                            )
+                        }
+                        IconButton(onClick = onMessageClick) {
+                            Icon(
+                                imageVector = Icons.Outlined.ChatBubbleOutline,
+                                contentDescription = "Messages",
+                                tint = textPrimary
+                            )
+                        }
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = lightBackground,
+                    titleContentColor = textPrimary
                 )
-            }
+            )
+        },
 
-
-            is GetAllPostState.Error -> {
-                Text(
-                    text = (getPostState as GetAllPostState.Error).message,
-                    color = Color.Red
+        // ➕ FLOATING ACTION BUTTON (Add Post)
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onAddPostClick,
+                containerColor = primaryBrand,
+                contentColor = Color.White,
+                shape = FloatingActionButtonDefaults.shape
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "Create Post",
+                    modifier = Modifier.size(24.dp)
                 )
-            }
-
-
-
-
-
             }
         }
+    ) { paddingValues -> // ⚠️ Critical: standard scaffold inner padding handles system/top bar spacing
 
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            when (getPostState) {
+                is GetAllPostState.Idle -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Nothing to Show",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.Gray
+                        )
+                    }
+                }
+
+                is GetAllPostState.Loading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = primaryBrand)
+                    }
+                }
+
+                is GetAllPostState.Success -> {
+                    val posts = (getPostState as GetAllPostState.Success).posts
+                    PostVerticalList(
+                        posts = posts,
+                        onViewClick = {},
+                        mainNavController = rootNavController
+                    )
+                }
+
+                is GetAllPostState.Error -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize().padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = (getPostState as GetAllPostState.Error).message,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                }
+            }
+        }
     }
+}
 
 
 

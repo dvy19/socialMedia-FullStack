@@ -19,7 +19,7 @@ fun RootNav(innerPadding: PaddingValues) {
 
     NavHost(
         navController = rootNavController,
-        startDestination = "signup"
+        startDestination = "splash"
     ) {
 
         composable("splash"){

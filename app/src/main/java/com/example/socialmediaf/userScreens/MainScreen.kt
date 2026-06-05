@@ -33,7 +33,12 @@ fun MainScreen(rootNavController: NavController) {
         ) {
 
             composable(Screens.Home.route) {
-                HomeScreen(mainNavController)
+                HomeScreen(
+                    mainNavController,
+                    onAddPostClick = {  },
+                    onNotificationClick = { },
+                    onMessageClick = {  }
+                )
             }
 
             composable(Screens.ProfileScreen.route){
