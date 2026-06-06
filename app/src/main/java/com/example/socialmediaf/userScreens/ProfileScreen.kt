@@ -50,7 +50,8 @@ import com.example.socialmediaf.Screens
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-                  mainNavController: NavController
+                  mainNavController: NavController,
+                  rootNavController: NavController
 
 
 ) {
@@ -66,28 +67,21 @@ fun ProfileScreen(
         factory= DetailViewModelFactory(repository)
     )
 
-    var state = viewModel.userDetailState.collectAsState()
+    var state = viewModel.userDetailState.collectAsState().value
 
     LaunchedEffect(Unit) {
         viewModel.getUserProfile()
     }
 
     Scaffold(
-
         topBar = {
-
             TopAppBar(
-
                 title = {
                     Text("Your Profile")
                 },
-
                 navigationIcon = {
-
                     IconButton(
-                        onClick = {
-
-                        }
+                        onClick = {}
                     ) {
                         Icon(
                             Icons.Default.Menu,
@@ -95,15 +89,9 @@ fun ProfileScreen(
                         )
                     }
                 },
-
                 actions = {
-
                     IconButton(
-                        onClick = {
-                           // mainNavController.navigate(Screens.Suggestion.route)
-
-
-                        }
+                        onClick = {}
                     ) {
                         Icon(
                             Icons.Default.Message,
@@ -113,13 +101,9 @@ fun ProfileScreen(
                 }
             )
         },
-
         floatingActionButton = {
-
             FloatingActionButton(
-                onClick = {
-
-                }
+                onClick = {}
             ) {
                 Icon(
                     Icons.Default.Add,
@@ -127,24 +111,23 @@ fun ProfileScreen(
                 )
             }
         }
-
     ) { innerPadding ->
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-
             when (val result = state) {
-
                 is UserDetailState.Idle -> {
 
-                    Text("Loading...")
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("Idle / Initializing...")
+                    }
                 }
-
                 is UserDetailState.Loading -> {
-
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -152,28 +135,19 @@ fun ProfileScreen(
                         CircularProgressIndicator()
                     }
                 }
-
                 is UserDetailState.Success -> {
-
                     val profile = result.userData
-
                     ProfileScreenLayout(
-
                         onLogout = {
                             sessionManager.logout()
 
-                            mainNavController.navigate("login")
+                            rootNavController.navigate("login")
                         },
-
-                        onActivity = {
-
-                        },
-
+                        onActivity = {},
                         first_name = profile.first_name,
                         bio = profile.bio
                     )
                 }
-
                 is UserDetailState.Error -> {
 
                     Text("Error")

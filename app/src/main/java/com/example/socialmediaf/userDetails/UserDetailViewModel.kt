@@ -75,6 +75,12 @@ class UserDetailViewModel(
             try{
                 val response=repository.get_profile()
 
+                Log.d("response ", response.toString())
+                Log.d("m body", response.body().toString())
+                Log.d("m message", response.message())
+                Log.d("m", response.code().toString())
+
+
                 if(response.body()!=null && response.isSuccessful){
 
                     _userDetailState.value = UserDetailState.Success(

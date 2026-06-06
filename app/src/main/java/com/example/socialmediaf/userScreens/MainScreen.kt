@@ -44,6 +44,7 @@ fun MainScreen(rootNavController: NavController) {
             composable(Screens.ProfileScreen.route){
                 ProfileScreen(
                     mainNavController,
+                    rootNavController
 
                 )
             }
