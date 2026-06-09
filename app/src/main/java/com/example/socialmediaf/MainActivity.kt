@@ -45,4 +45,6 @@ sealed class Screens(var route: String){
 
     data object FriendProfile:Screens("friend_profile")
 
+    data object CreatePost:Screens("create_post")
+
 }

@@ -1,6 +1,7 @@
 package com.example.socialmediaf.posts
 
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -12,4 +13,11 @@ interface PostApiInterface{
     suspend fun getAllPosts(
         @Header ("Authorization") token:String,
     ) : Response<List<PostResponse>>
+
+
+    @POST("api/posts/create-post/")
+    suspend fun createPost(
+        @Header("Authorization") token:String,
+        @Body request: PostRequest
+    ) :Response<PostResponse>
 }

@@ -13,7 +13,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.socialmediaf.BottomNavBar
 import com.example.socialmediaf.Screens
+import com.example.socialmediaf.Screens.CreatePost
 import com.example.socialmediaf.friend.FriendProfile
+import com.example.socialmediaf.posts.CreatePostScreen
 
 @Composable
 fun MainScreen(rootNavController: NavController) {
@@ -35,7 +37,7 @@ fun MainScreen(rootNavController: NavController) {
             composable(Screens.Home.route) {
                 HomeScreen(
                     mainNavController,
-                    onAddPostClick = {  },
+                    onAddPostClick = {  mainNavController.navigate(Screens.CreatePost.route)},
                     onNotificationClick = { },
                     onMessageClick = {  }
                 )
@@ -47,6 +49,10 @@ fun MainScreen(rootNavController: NavController) {
                     rootNavController
 
                 )
+            }
+
+            composable(Screens.CreatePost.route){
+                CreatePostScreen(mainNavController)
             }
 
             composable(Screens.SearchScreen.route){

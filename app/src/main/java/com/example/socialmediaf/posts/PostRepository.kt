@@ -22,6 +22,19 @@ class PostRepository(
         )
     }
 
+    suspend fun create_post(
+        request: PostRequest
+    ):Response<PostResponse>{
+
+        val token=sessionManager.getAuthToken()
+            ?: throw IllegalStateException("User Not authenticated")
+
+        return apiService.createPost(
+            token="Bearer $token",
+            request
+        )
+    }
+
 
 
 }

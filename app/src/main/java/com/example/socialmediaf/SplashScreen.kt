@@ -37,7 +37,7 @@ fun SplashScreen(rootNavController: NavController) {
         delay(1500)
 
         if (sessionManager.isLoggedIn()) {
-            rootNavController.navigate("main") {
+            rootNavController.navigate("login") {
                 // Critical: Pops the splash screen off the backstack
                 popUpTo("splash") { inclusive = true }
             }
